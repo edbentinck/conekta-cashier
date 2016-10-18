@@ -474,4 +474,25 @@ trait Billable
     {
         static::$conektaKey = $key;
     }
+
+    /**
+     * Create a Conekta customer for the given user.
+     *
+     * @param  string  $token
+     * @param  array   $options
+     * 
+     * @return ConektaCustomer
+     */
+    public function createAsConektaCustomer($token, array $options = [])
+    {
+        $options = array_key_exists('email', $options)
+                ? $options : array_merge($options, ['email' => $this->email]);
+
+        $conekta  = new ConektaGateway($this);
+        $customer = $conekta->createConektaCustomer($token, $options);
+        
+        $conekta->updateLocalConektaData($customer);
+
+        return $customer;
+    }
 }
