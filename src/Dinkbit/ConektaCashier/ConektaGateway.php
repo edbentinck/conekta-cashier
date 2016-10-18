@@ -83,7 +83,7 @@ class ConektaGateway
         try {
             $response = Conekta_Charge::create($options);
         } catch (Conekta_Error $e) {
-            return false;
+            throw new Conekta_Error($e->message_to_purchaser);
         }
 
         return $response;
